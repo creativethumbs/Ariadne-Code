@@ -1,6 +1,6 @@
 ﻿/********************************************************
- * Code adapted from Nyero Faulitahs'
- * Super Meat Boy controller for Unity
+ * Code adapted from Nyero Faulitahs' Super Meat Boy controller for Unity
+ * Controller.cs - Controls for the player
  ********************************************************/
 using UnityEngine;
 using System.Collections;
@@ -45,16 +45,7 @@ public class Controller : MonoBehaviour
 			else
 				return false;
 		}
-		/*
-		//Returns whether or not player is touching wall or ground.
-		public bool isTouching()
-		{
-			if(isGround() || isWall())
-				return true;
-			else
-				return false;
-		}*/
-		
+
 		//Returns direction of wall.
 		public int wallDirection()
 		{
@@ -104,6 +95,7 @@ public class Controller : MonoBehaviour
 	
 	void Update()
 	{
+		/*
 		if (GetComponent<Renderer> ().isVisible) {
 			seen = true; 
 		}
@@ -112,6 +104,7 @@ public class Controller : MonoBehaviour
 			Destroy(gameObject); 
 			SpawnPoint.GetComponent<Renderer>().enabled = true; 
 		}
+		*/
 
 		//Handle input
 		if (Input.GetKey (KeyCode.LeftArrow)) {
@@ -166,12 +159,6 @@ public class Controller : MonoBehaviour
 		input.y = 0;
 	}
 
-	void OnCollisionEnter2D(Collision2D coll) {
-		if (coll.gameObject.tag == "Food")
-			coll.rigidbody.gravityScale = 3; 
-		
-	}
-
 	void OnCollisionStay2D(Collision2D coll){
 		touching = true;
 	}
@@ -196,11 +183,7 @@ public class Controller : MonoBehaviour
 	void OnTriggerEnter2D(Collider2D other) {
 		// Use collider bounds to get the center of the collider. May be inaccurate
 		// for some colliders (i.e. MeshCollider with a 'plane' mesh)
-		print ("trigger"); 
-		if (other.tag == "Web") {
-			print ("found web"); 
-			GetComponent<Rigidbody2D>().isKinematic = true;
-		}
+
 		if (other.tag == "ExitPoint") {
 			print ("Inside Exit"); 
 			GetComponent<Rigidbody2D>().isKinematic = true;

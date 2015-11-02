@@ -11,8 +11,8 @@ public class DrawLine : MonoBehaviour {
 	private List<Rigidbody2D> colliderList;
 	private Vector3 mousePos;
 	public Rigidbody2D ColliderPrefab; 
-	public Transform PlayerPrefab; 
-	public GameObject SpawnPoint;
+	//public Transform PlayerPrefab; 
+	//public GameObject SpawnPoint;
 	public Transform brush; 
 
 	private int startIdx;
@@ -27,7 +27,6 @@ public class DrawLine : MonoBehaviour {
 
 	void Start() {
 		Cursor.visible = false;
-		SpawnPoint = GameObject.FindWithTag ("SpawnPoint"); 
 	}
 
 	//	-----------------------------------	
@@ -50,13 +49,6 @@ public class DrawLine : MonoBehaviour {
 
 		brush.transform.position = mousePosition; 
 
-		if (Input.GetKeyDown (KeyCode.Return)) {
-			print ("return key is held down");
-			Instantiate (PlayerPrefab, new Vector2(SpawnPoint.transform.position.x,SpawnPoint.transform.position.y), Quaternion.identity);
-
-			//Destroy(SpawnPoint);
-			SpawnPoint.GetComponent<Renderer>().enabled = false; 
-		}
 		if (Input.GetKeyDown (KeyCode.H)) {
 			print ("h key is held down");
 			ToggleColliders(); 
