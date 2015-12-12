@@ -49,19 +49,3 @@ function InputListen() {
      
 }
 
-function OnCollisionEnter2D(coll: Collision2D) //When we run into something
-{
-	if(coll.gameObject.tag == "Food") {
-		var foodscalex = coll.transform.localScale.x; 
-		var foodscaley = coll.transform.localScale.y; 
-		
-		if(foodscalex > 0.1) {
-			coll.transform.localScale.x -= 0.2; 
-			coll.transform.localScale.y -= 0.2; 
-		}
-		else 
-			Destroy(coll.gameObject); 
-	}
-	
-	
-}

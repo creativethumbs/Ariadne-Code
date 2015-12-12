@@ -61,17 +61,14 @@ public class Controller : MonoBehaviour
 		}
 
 	}
-	
-	//Feel free to tweak these values in the inspector to perfection.  I prefer them private.
+
+
 	public float    speed = 14f;
 	public float    accel = 6f;
 	public float airAccel = 3f;
-	public float     jump = 14f;  //I could use the "speed" variable, but this is only coincidental in my case.  Replace line 89 if you think otherwise.
-	//AudioSource audio;
-	//public AudioClip walk; 
-	//public AudioClip jumping; 
+	public float     jump = 14f;  
+
 	public GameObject SpawnPoint;
-	//private float t = 0f; 
 	private Vector3 InitialScale; 
 
 	private bool touching; 
@@ -82,8 +79,7 @@ public class Controller : MonoBehaviour
 	{
 		//Create an object to check if player is grounded or touching wall
 		groundState = new GroundState(transform.gameObject);
-		//audio = GetComponent<AudioSource> (); 
-		//audio.loop = true; 
+
 		SpawnPoint = GameObject.FindWithTag ("SpawnPoint"); 
 		InitialScale = transform.localScale; 
 		touching = false; 
@@ -93,41 +89,21 @@ public class Controller : MonoBehaviour
 	
 	void Update()
 	{
+
 		//Handle input
 		if (Input.GetKey (KeyCode.LeftArrow)) {
 			input.x = -1;
-			/*
-			if (groundState.isGround() && !audio.isPlaying) {
-				audio.clip = walk; 
-				audio.Play (); 
-			}*/
 		} else if (Input.GetKey (KeyCode.RightArrow)) {
 			input.x = 1;
-			/*
-			if (groundState.isGround() && !audio.isPlaying) {
-				audio.clip = walk; 
-				audio.Play (); 
-			}*/
+
 		} else { // not moving left or right
 			input.x = 0;
-			/*
-			if(audio.isPlaying) 
-				audio.Stop (); */
 		}
 		
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			input.y = 1;
-			/*
-			if (audio.isPlaying) {
-				audio.Stop (); 
-			}
-			audio.PlayOneShot(jumping); */
 		}
 
-		/*
-		if (!groundState.isGround ()) {
-			audio.Stop (); 
-		}*/
 		
 		//Reverse player if going different direction
 		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, (input.x == 0) ? transform.localEulerAngles.y : (input.x + 1) * 90, transform.localEulerAngles.z);
@@ -137,13 +113,7 @@ public class Controller : MonoBehaviour
 	void FixedUpdate()
 	{
 		GetComponent<Rigidbody2D>().AddForce(new Vector2(((input.x * speed) - GetComponent<Rigidbody2D>().velocity.x) * (groundState.isGround() ? accel : airAccel), 0)); //Move player.
-		//GetComponent<Rigidbody2D>().velocity = new Vector2((input.x == 0 && groundState.isGround()) ? 0 : GetComponent<Rigidbody2D>().velocity.x, (input.y == 1 && (touching || groundState.isTouching())) ? jump : GetComponent<Rigidbody2D>().velocity.y); //Stop player if input.x is 0 (and grounded) and jump if input.y is 1
 		GetComponent<Rigidbody2D>().velocity = new Vector2((input.x == 0 && groundState.isGround()) ? 0 : GetComponent<Rigidbody2D>().velocity.x, (input.y == 1 && touching) ? jump : GetComponent<Rigidbody2D>().velocity.y); //Stop player if input.x is 0 (and grounded) and jump if input.y is 1
-
-		/*
-		if(groundState.isWall() && !groundState.isGround() && input.y == 1)
-			GetComponent<Rigidbody2D>().velocity = new Vector2(-groundState.wallDirection() * speed * 0.75f, GetComponent<Rigidbody2D>().velocity.y); //Add force negative to wall direction (with speed reduction)
-		*/
 
 		if(touching && input.y == 1)
 			GetComponent<Rigidbody2D>().velocity = new Vector2(-groundState.wallDirection() * speed * 0.75f, GetComponent<Rigidbody2D>().velocity.y); //Add force negative to wall direction (with speed reduction)
@@ -152,7 +122,16 @@ public class Controller : MonoBehaviour
 	}
 
 	void OnCollisionEnter2D(Collision2D coll){
-		touching = true;
+		if (coll.gameObject.tag == "ExitPoint") {
+			print ("Inside Exit"); 
+			GetComponent<Rigidbody2D>().isKinematic = true;
+			StartCoroutine("Disappear");
+
+
+		}
+
+		else touching = true;
+
 	}
 
 	void OnCollisionStay2D(Collision2D coll){
@@ -177,9 +156,7 @@ public class Controller : MonoBehaviour
 	} 
 
 	void OnTriggerEnter2D(Collider2D other) {
-		// Use collider bounds to get the center of the collider. May be inaccurate
-		// for some colliders (i.e. MeshCollider with a 'plane' mesh)
-
+		
 		if (other.tag == "ExitPoint") {
 			print ("Inside Exit"); 
 			GetComponent<Rigidbody2D>().isKinematic = true;
@@ -190,3 +167,5 @@ public class Controller : MonoBehaviour
 	}
 
 }
+
+

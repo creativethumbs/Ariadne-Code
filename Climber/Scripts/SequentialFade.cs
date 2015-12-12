@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿/* Fader used at the beginning */
+
+using UnityEngine;
 using System.Collections;
 
 public class SequentialFade : MonoBehaviour {
